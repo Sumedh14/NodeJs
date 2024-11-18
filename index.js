@@ -1,26 +1,13 @@
 const express = require("express");
 const server = express();
-const productRouter = express.Router();
-const productdata = require("./controller/product");
+
+const productRouter = require("./routes/productRouter");
+const userRouter = require("./routes/usersRouter");
 
 server.use(express.json());
 
-server.get("/", (req, res) => {
-  res.send("<h1>Express</h1>");
-  // res.send(`${data}`);
-});
-
-server.get("/products", productdata.getProduct);
-
-server.post("/products", productdata.createProduct);
-
-server.get("/products/:id", productdata.findById);
-
-server.put("/products/:id", productdata.updateProduct);
-
-server.patch("/products/:id", productdata.updateProductPatch);
-
-server.delete("/products/:id", productdata.deleteProduct);
+server.use("/products", productRouter.routes);
+server.use("/user", userRouter.routes);
 
 server.listen(8080, () => {
   console.log("server strated");
