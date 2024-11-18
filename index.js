@@ -1,9 +1,7 @@
 const express = require("express");
 const server = express();
-
+const productRouter = express.Router();
 const productdata = require("./controller/product");
-
-const index = fs.readFileSync("index.html", "utf-8");
 
 server.use(express.json());
 
@@ -14,13 +12,13 @@ server.get("/", (req, res) => {
 
 server.get("/products", productdata.getProduct);
 
-server.post("/products",productdata.createProduct);
+server.post("/products", productdata.createProduct);
 
 server.get("/products/:id", productdata.findById);
 
-server.put("/products/:id",productdata.updateProduct);
+server.put("/products/:id", productdata.updateProduct);
 
-server.patch("/products/:id",productdata.updateProductPatch);
+server.patch("/products/:id", productdata.updateProductPatch);
 
 server.delete("/products/:id", productdata.deleteProduct);
 
