@@ -1,13 +1,19 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const server = express();
+const mongoose = require("mongoose");
 
-const productRouter = require("./routes/productRouter");
-const userRouter = require("./routes/usersRouter");
+main().catch((err) => console.log(err));
+async function main() {
+  await mongoose.connect("mongodb://127.0.0.1:27017/nodejs");
+  console.log("Connected successfully");
+}
 
 server.use(express.json());
-server.use(express.static(process.env.PUBLIC_DIR))
-server.use("/products", productRouter.routes);
+const productRouter = require("./routes/productRouter");
+const userRouter = require("./routes/usersRouter");
+// server.use(express.static(process.env.PUBLIC_DIR));
+server.use("/products", productRouter.router);
 server.use("/user", userRouter.routes);
 
 server.listen(process.env.PORT, () => {

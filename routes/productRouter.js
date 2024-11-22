@@ -7,11 +7,10 @@ const router = express.Router();
 //   // res.send(`${data}`);
 // });
 router
-  .get("/", productdata.getProduct)
   .post("/", productdata.createProduct)
   .get("/:id", productdata.findById)
   .put("/:id", productdata.updateProduct)
   .patch("/:id", productdata.updateProductPatch)
   .delete("/:id", productdata.deleteProduct);
 
-exports.routes = router;
+exports.router = router;
