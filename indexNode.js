@@ -2,6 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const server = express();
 const mongoose = require("mongoose");
+const cors = require("cors");
+
+server.use(cors());
+server.use(express.json());
 
 main().catch((err) => console.log(err));
 async function main() {
@@ -9,12 +13,20 @@ async function main() {
   console.log("Connected successfully");
 }
 
-server.use(express.json());
 const productRouter = require("./routes/productRouter");
 const userRouter = require("./routes/usersRouter");
+const imageUploaderRouter = require("./routes/imageUploaderRouter");
+
 // server.use(express.static(process.env.PUBLIC_DIR));
+
 server.use("/products", productRouter.router);
 server.use("/user", userRouter.routes);
+server.use("/upload", imageUploaderRouter.router);
+// server.post(
+//   "/upload",
+//   imageUploaderRouter.imagFile.upload.single("image"),
+//   imageUploaderRouter.imagFile.imageUploade
+// );
 
 server.listen(process.env.PORT, () => {
   console.log("server strated");
