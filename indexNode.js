@@ -22,11 +22,6 @@ const imageUploaderRouter = require("./routes/imageUploaderRouter");
 server.use("/products", productRouter.router);
 server.use("/user", userRouter.routes);
 server.use("/upload", imageUploaderRouter.router);
-// server.post(
-//   "/upload",
-//   imageUploaderRouter.imagFile.upload.single("image"),
-//   imageUploaderRouter.imagFile.imageUploade
-// );
 
 server.listen(process.env.PORT, () => {
   console.log("server strated");

@@ -7,11 +7,11 @@ const router = express.Router();
 //   // res.send(`${data}`);
 // });
 router
-  .get("/", userdata.getuser)
-  .post("/", userdata.createuser)
-  .get("/:id", userdata.findById)
-  .put("/:id", userdata.updateuser)
-  .patch("/:id", userdata.updateuserPatch)
-  .delete("/:id", userdata.deleteuser);
+  .get("/", userdata.getUser)
+  .post("/", userdata.createUser)
+  .get("/:id", userdata.findUserById)
+  .put("/:id", userdata.replaceUser)
+  .patch("/:id", userdata.updateUser)
+  .delete("/:id", userdata.deleteUser);
 
 exports.routes = router;
