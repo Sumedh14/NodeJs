@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 
 function Image() {
   const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState({ name: "", image: "" });
   const [postImage, setPostImage] = useState({ name: "", image: "" });
 
   const convertToBase64 = (file) => {
@@ -17,32 +17,51 @@ function Image() {
       };
     });
   };
-  let data;
-  console.log("data", data);
-  console.log("postImage", { ...postImage, ...data });
 
   const handleFile = async (e) => {
+    const name = e.target.files[0].name;
     setFile(e.target.files[0]);
-    setPreview(URL.createObjectURL(e.target.files[0]));
+    // setPreview(URL.createObjectURL(e.target.files[0]));
     const base64 = await convertToBase64(e.target.files[0]);
-    const name = e.target.files[0].name.match(/[^\.]+/)[0];
-    data = { name: name, image: base64 };
-    console.log("data", data);
+    const data = { name: name, image: base64 };
     setPostImage({ ...postImage, ...data });
   };
 
-  const createPost = async (newImage) => {
-    console.log("newImage", newImage);
+  const base64ToImage = (data) => {
+    const name = data.data.name;
+    const base64string = data.data.image;
+    const base64Data = base64string.split(",")[1];
+    const binaryString = window.atob(base64Data);
+
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    const blob = new Blob([bytes], { type: "image/*" });
+    const url = URL.createObjectURL(blob);
+
+    const previewData = { name: name, image: url };
+    setPreview({ ...preview, ...previewData });
+  };
+
+  const createPost = (newImage) => {
     try {
       fetch("http://localhost:8080/upload/m", {
         method: "POST",
-        body: newImage,
+        crossOrigin: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newImage),
       })
         .then((response) => {
           return response.json();
         })
         .then((data) => {
-          console.log("Server response:", data);
+          base64ToImage(data);
         })
         .catch((error) => {
           console.error("Error uploading file:", error);
@@ -52,8 +71,7 @@ function Image() {
     }
   };
 
-  const handleUpload = (e) => {
-    e.preventDefault();
+  const postRequest = () => {
     const formData = new FormData();
     formData.append("image", file);
 
@@ -70,9 +88,22 @@ function Image() {
       .catch((error) => {
         console.error("Error uploading file:", error);
       });
+  };
 
-    console.log("createPost(postImage)", createPost(postImage));
+  const handleUpload = (e) => {
+    e.preventDefault();
+    // postRequest();
     createPost(postImage);
+  };
+
+  const downloadFile = (e) => {
+    e.preventDefault();
+    const link = document.createElement("a");
+    link.href = preview.image;
+    link.download = preview.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -84,9 +115,15 @@ function Image() {
 
       <div className="imageContainer">
         <div className="container">
-          <img src={preview} />
+          <img src={preview.image} />
         </div>
-        <button>Download Image</button>
+        <button
+          onClick={(e) => {
+            downloadFile(e);
+          }}
+        >
+          Download Image
+        </button>
       </div>
     </>
   );

@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 server.use(cors());
-server.use(express.json());
+server.use(express.json({ limit: "1.5mb" }));
 
 main().catch((err) => console.log(err));
 async function main() {
