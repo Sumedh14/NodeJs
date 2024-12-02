@@ -4,6 +4,12 @@ const server = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
+const publicKey = fs.readFileSync(
+  path.resolve(__dirname, "./public.key"),
+  "utf8"
+);
 
 server.use(cors());
 server.use(express.json({ limit: "1.5mb" }));
@@ -23,7 +29,7 @@ const userRouter = require("./routes/usersRouter");
 const auth = (req, res, next) => {
   try {
     const token = req.get("Authorization").split("Bearer ")[1];
-    const decode = jwt.verify(token, process.env.SECRET);
+    const decode = jwt.verify(token, publicKey);
     if (decode.email) {
       next();
     } else {

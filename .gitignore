@@ -2,3 +2,5 @@ node_modules
 db
 file.txt
 .env
+public.key
+private.key
