@@ -1,17 +1,14 @@
 const express = require("express");
-const userdata = require("../controller/users");
-const router = express.Router();
+router = express.Router();
+const userData = require("../controller/users");
 
-// productRouter.get("/", (req, res) => {
-//   res.send("<h1>Express</h1>");
-//   // res.send(`${data}`);
-// });
+// .post("/", userData.createUser)
+
 router
-  .get("/", userdata.getUser)
-  .post("/", userdata.createUser)
-  .get("/:id", userdata.findUserById)
-  .put("/:id", userdata.replaceUser)
-  .patch("/:id", userdata.updateUser)
-  .delete("/:id", userdata.deleteUser);
+  .get("/", userData.getUsers)
+  .get("/:id", userData.findUserById)
+  .put("/:id", userData.replaceUser)
+  .patch("/:id", userData.updateUser)
+  .delete("/:id", userData.deleteUser);
 
-exports.routes = router;
+exports.router = router;
