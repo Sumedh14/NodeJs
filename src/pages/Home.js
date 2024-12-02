@@ -1,9 +1,9 @@
-import Image from "../features/images/components/Image";
+import ImageUploders from "../features/images/components/Image";
 
 function Home() {
   return (
     <div>
-      <Image />
+      <ImageUploders />
     </div>
   );
 }

@@ -12,7 +12,7 @@ const publicKey = fs.readFileSync(
 );
 
 server.use(cors());
-server.use(express.json({ limit: "1.5mb" }));
+server.use(express.json({ limit: "1mb" }));
 
 main().catch((err) => console.log(err));
 async function main() {

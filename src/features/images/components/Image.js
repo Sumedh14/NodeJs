@@ -1,20 +1,73 @@
 import React, { useCallback, useState } from "react";
 
-function Image() {
+function ImageUploders() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState({ name: "", image: "" });
   const [postImage, setPostImage] = useState({ name: "", image: "" });
 
+  // const compressImage = (file) => {
+  //   const url = URL.createObjectURL(file);
+  //   const img = new Image();
+  //   img.src = url;
+
+  //   console.log("file", file, file.size);
+  //   img.onload = () => {
+  //     const canvas = document.createElement("canvas");
+  //     const ctx = canvas.getContext("2d");
+  //     canvas.width = img.naturalWidth;
+  //     canvas.height = img.naturalHeight;
+
+  //     ctx.drawImage(img, 0, 0);
+
+  //     canvas.toBlob(
+  //       async (blob) => {
+  //         base64 = await convertToBase64(blob);
+  //         console.log();
+  //       },
+  //       "image/webp",
+  //       0.8
+  //     );
+  //     return base64;
+  //   };
+  // };
+
   const convertToBase64 = (file) => {
     return new Promise((resolve, rejects) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.src = url;
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+
+        ctx.drawImage(img, 0, 0);
+
+        canvas.toBlob(
+          async (blob) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(blob);
+            fileReader.onload = () => {
+              resolve(fileReader.result);
+            };
+            fileReader.onerror = (error) => {
+              rejects(error);
+            };
+          },
+          "image/webp",
+          0.8
+        );
       };
-      fileReader.onerror = (error) => {
-        rejects(error);
-      };
+      // const fileReader = new FileReader();
+      // fileReader.readAsDataURL(file);
+      // fileReader.onload = () => {
+      //   resolve(fileReader.result);
+      // };
+      // fileReader.onerror = (error) => {
+      //   rejects(error);
+      // };
     });
   };
 
@@ -61,6 +114,7 @@ function Image() {
           return response.json();
         })
         .then((data) => {
+          console.log("data response", data);
           base64ToImage(data);
         })
         .catch((error) => {
@@ -129,4 +183,4 @@ function Image() {
   );
 }
 
-export default Image;
+export default ImageUploders;
