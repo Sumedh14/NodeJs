@@ -11,3 +11,12 @@ exports.createImage = async (req, res) => {
     res.status(409).json({ err: err.message });
   }
 };
+
+exports.getAllImage = async (req, res) => {
+  try {
+    const images = await ImageSc.find({}).exec();
+    res.status(200).json(images);
+  } catch (err) {
+    res.status(409).json({ err: err.message });
+  }
+};

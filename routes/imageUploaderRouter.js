@@ -27,7 +27,8 @@ const imageUploade = (req, res) => {
 
 router
   .post("/", upload.single("image"), imageUploade)
-  .post("/m", imageUpload.createImage);
+  .post("/m", imageUpload.createImage)
+  .get("/", imageUpload.getAllImage);
 
 exports.router = router;
 

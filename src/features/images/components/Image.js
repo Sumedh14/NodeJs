@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 function ImageUploders() {
   const [file, setFile] = useState(null);
@@ -125,24 +125,24 @@ function ImageUploders() {
     }
   };
 
-  const postRequest = () => {
-    const formData = new FormData();
-    formData.append("image", file);
+  // const postRequest = () => {
+  //   const formData = new FormData();
+  //   formData.append("image", file);
 
-    fetch("http://localhost:8080/upload", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Server response:", data);
-      })
-      .catch((error) => {
-        console.error("Error uploading file:", error);
-      });
-  };
+  //   fetch("http://localhost:8080/upload", {
+  //     method: "POST",
+  //     body: formData,
+  //   })
+  //     .then((response) => {
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       console.log("Server response:", data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error uploading file:", error);
+  //     });
+  // };
 
   const handleUpload = (e) => {
     e.preventDefault();
@@ -150,34 +150,20 @@ function ImageUploders() {
     createPost(postImage);
   };
 
-  const downloadFile = (e) => {
-    e.preventDefault();
-    const link = document.createElement("a");
-    link.href = preview.image;
-    link.download = preview.name;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   return (
     <>
       <div className="uploadContainer">
-        <input type="file" onChange={(e) => handleFile(e)} />
-        <button onClick={(e) => handleUpload(e)}> upload image</button>
+        <input type="file" id="file" onChange={(e) => handleFile(e)} />
+        <label htmlFor="file">Choose a image</label>
+        <button className="upload_container" onClick={(e) => handleUpload(e)}>
+          upload
+        </button>
       </div>
 
       <div className="imageContainer">
-        <div className="container">
+        <div className="image_Container">
           <img src={preview.image} />
         </div>
-        <button
-          onClick={(e) => {
-            downloadFile(e);
-          }}
-        >
-          Download Image
-        </button>
       </div>
     </>
   );
