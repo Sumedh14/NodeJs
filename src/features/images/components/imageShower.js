@@ -22,7 +22,6 @@ function ImageShower() {
     document.body.removeChild(link);
   };
 
-  console.log(file);
   return (
     <div className="content">
       <div className="image__Container">
@@ -31,14 +30,16 @@ function ImageShower() {
               <div key={index} className="imageContainer">
                 <div className="container">
                   <img src={data.image} />
+                  <div className="buttonClick">
+                    <button
+                      onClick={(e) => {
+                        downloadFile(e, data);
+                      }}
+                    >
+                      Download
+                    </button>
+                  </div>
                 </div>
-                <button
-                  onClick={(e) => {
-                    downloadFile(e, data);
-                  }}
-                >
-                  Download Image
-                </button>
               </div>
             ))
           : "Loading"}
